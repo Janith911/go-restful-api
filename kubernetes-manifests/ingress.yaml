@@ -6,7 +6,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: go-users-api.vmbox-cluster.com
+  - host: go-users-api.vbox-local-cluster.com
     http:
       paths:
       - backend:
