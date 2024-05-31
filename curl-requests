@@ -1,20 +1,20 @@
 ### Create Users
 
-curl http://localhost:8000/users -X POST -d '{"Firstname": "Richard", "Lastname": "Hendricks", "Occupation": "CEO and founder of Pied Piper and Pipernet"}'
+curl http://192.168.1.171/users -X POST -d '{"Firstname": "Richard", "Lastname": "Hendricks", "Occupation": "CEO and founder of Pied Piper and Pipernet"}'
 
 
 ### Update User
 
-curl http://localhost:8000/users/1 -X POST -d '{"Firstname": "Richard", "Lastname": "Hendricks", "Occupation": "Lecturer at Stanfard University"}'
+curl http://192.168.1.171/users/1 -X POST -d '{"Firstname": "Richard", "Lastname": "Hendricks", "Occupation": "Lecturer at Stanfard University"}'
 
 ### Delete User
 
-curl http://localhost:8000/users/1 -X DELETE
+curl http://192.168.1.171/users/1 -X DELETE
 
 ### Get Users
 
-curl http://localhost:8000/users
+curl http://192.168.1.171/users
 
 ### Get a specific User
 
-curl http://localhost:8000/users/1
+curl http://192.168.1.171/users/1

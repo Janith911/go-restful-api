@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 
 	"gorm.io/driver/mysql"
@@ -148,7 +149,12 @@ func deleteUser(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	mysql_dsn := "goapiuser:goapipasswd@tcp(127.0.0.1:3306)/goapi"
+	mysqluser := os.Getenv("MYSQL_USER")
+	mysqlpass := os.Getenv("MYSQL_PASS")
+	mysqldb := os.Getenv("MYSQL_SCHEMA")
+	mysqlendpoint := os.Getenv("MYSQL_ENDPOINT")
+	goapiendpoint := os.Getenv("GOAPI_ENDPOINT")
+	mysql_dsn := mysqluser + ":" + mysqlpass + "@tcp(" + mysqlendpoint + ")/" + mysqldb
 
 	// Connect to MySQL database instance
 	db := initDB(mysql_dsn)
@@ -164,5 +170,5 @@ func main() {
 	r.HandleFunc("DELETE /users/{id}", deleteUser(db))
 
 	//Start the server and start listening
-	http.ListenAndServe(":8000", r)
+	http.ListenAndServe(goapiendpoint, r)
 }

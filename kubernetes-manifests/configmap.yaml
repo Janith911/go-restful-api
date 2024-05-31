@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: go-users-api-environment-variables
+  namespace: go-users-api
+data:
+  GOAPI_ENDPOINT: 0.0.0.0:8000
+  MYSQL_ENDPOINT: 192.168.1.171:3306
+  MYSQL_PASS: goapipasswd
+  MYSQL_SCHEMA: goapi
+  MYSQL_USER: goapiuser
