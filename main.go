@@ -9,6 +9,8 @@ import (
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+
+	"github.com/newrelic/go-agent/v3/newrelic"
 )
 
 type User struct {
@@ -154,6 +156,8 @@ func main() {
 	mysqldb := os.Getenv("MYSQL_SCHEMA")
 	mysqlendpoint := os.Getenv("MYSQL_ENDPOINT")
 	goapiendpoint := os.Getenv("GOAPI_ENDPOINT")
+	nr_application_name := os.Getenv("NR_APP_NAME")
+	nr_license_key := os.Getenv("NR_LICENSE_KEY")
 	mysql_dsn := mysqluser + ":" + mysqlpass + "@tcp(" + mysqlendpoint + ")/" + mysqldb
 
 	// Connect to MySQL database instance
@@ -162,12 +166,21 @@ func main() {
 	// Create new Router
 	r := http.NewServeMux()
 
+	app, err := newrelic.NewApplication(
+		newrelic.ConfigAppName(nr_application_name),
+		newrelic.ConfigLicense(nr_license_key),
+	)
+
+	if err != nil {
+		log.Fatal("An ERROR Occurred : ", err)
+	}
+
 	// Bind Handler functions
-	r.HandleFunc("GET /users", getUsers(db))
-	r.HandleFunc("GET /users/{id}", getUser(db))
-	r.HandleFunc("POST /users/{id}", updateUser(db))
-	r.HandleFunc("POST /users", createUser(db))
-	r.HandleFunc("DELETE /users/{id}", deleteUser(db))
+	http.HandleFunc(newrelic.WrapHandleFunc(app, "GET /users", getUsers(db)))
+	http.HandleFunc(newrelic.WrapHandleFunc(app, "GET /users/{id}", getUser(db)))
+	http.HandleFunc(newrelic.WrapHandleFunc(app, "POST /users/{id}", updateUser(db)))
+	http.HandleFunc(newrelic.WrapHandleFunc(app, "POST /users", createUser(db)))
+	http.HandleFunc(newrelic.WrapHandleFunc(app, "DELETE /users/{id}", deleteUser(db)))
 
 	//Start the server and start listening
 	http.ListenAndServe(goapiendpoint, r)
