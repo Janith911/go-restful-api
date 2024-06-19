@@ -176,11 +176,11 @@ func main() {
 	}
 
 	// Bind Handler functions
-	http.HandleFunc(newrelic.WrapHandleFunc(app, "GET /users", getUsers(db)))
-	http.HandleFunc(newrelic.WrapHandleFunc(app, "GET /users/{id}", getUser(db)))
-	http.HandleFunc(newrelic.WrapHandleFunc(app, "POST /users/{id}", updateUser(db)))
-	http.HandleFunc(newrelic.WrapHandleFunc(app, "POST /users", createUser(db)))
-	http.HandleFunc(newrelic.WrapHandleFunc(app, "DELETE /users/{id}", deleteUser(db)))
+	r.HandleFunc(newrelic.WrapHandleFunc(app, "GET /users", getUsers(db)))
+	r.HandleFunc(newrelic.WrapHandleFunc(app, "GET /users/{id}", getUser(db)))
+	r.HandleFunc(newrelic.WrapHandleFunc(app, "POST /users/{id}", updateUser(db)))
+	r.HandleFunc(newrelic.WrapHandleFunc(app, "POST /users", createUser(db)))
+	r.HandleFunc(newrelic.WrapHandleFunc(app, "DELETE /users/{id}", deleteUser(db)))
 
 	//Start the server and start listening
 	http.ListenAndServe(goapiendpoint, r)
